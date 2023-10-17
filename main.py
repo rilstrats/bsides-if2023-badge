@@ -14,6 +14,8 @@ from uhashlib import sha256
 # Initialize our neopixel(s)
 np = fu.init_neo()
 fu.test_neo_1(np)
+# fu.test_neo_2(np)
+# fu.test_neo_3(np)
 # Setup a loop counter for controlling our tasks
 # Plan to potentially convert this to "utime" to use the internal clock
 loop_ctr = 0
@@ -37,12 +39,12 @@ spi_hnd, scs = fu.init_spi_eeprom()
 # Just read the flags; we don't do anything with them yet... Should we read them
 # again every once in a while so that folk can see it again and again?
 f1 = fu.cln(fu.spi_read(spi_hnd, scs, 2309, 32))
-
+print(f1)
 k = fu.read_i2c(i2c_h)
 dec = aes(sha256(machine.unique_id() + k).digest()[0:16], 2, bytes(16))
 enc_flg = fu.spi_read(spi_hnd, scs, 2223, 48)
 f2 = fu.cln(dec.decrypt(enc_flg))
-
+print(f2)
 # is it a secret?
 if not button0.value():
     # Do a thing :)
@@ -103,8 +105,8 @@ if __name__ == "__main__":
     while True:
         if current_state == STATE_A:
             # print("In State A")
-            if not wlan_h.isconnected():
-                wlan_h.connect(fu.secrets.SSID, fu.secrets.PASSWORD)
+            # if not wlan_h.isconnected():
+            #     wlan_h.connect(fu.secrets.SSID, fu.secrets.PASSWORD)
             # button_1_arr, led_arr = fu.butt_check(button0, button_1_arr, leds=led_arr)
             # button_2_arr, led_arr = fu.butt_check(button1, button_2_arr, leds=led_arr)
             if fu.utime.ticks_diff(delay_mon, fu.utime.ticks_ms()) < delay_min:

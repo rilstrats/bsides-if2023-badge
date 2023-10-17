@@ -31,8 +31,9 @@ def conn():
     # print(secrets.SSID, secrets.PASSWORD)
     # while not wlan.isconnected():
         # wlan.connect(secrets.SSID, secrets.PASSWORD)
-    wlan.connect(secrets.SSID, secrets.PASSWORD)
-    print(wlan.isconnected())
+    for network_pair in secrets.NETWORKS:
+        wlan.connect(network_pair[0], network_pair[1])
+        if wlan.isconnected(): break
     return wlan
 
 def test_p1n(num):
@@ -342,22 +343,22 @@ def test_spi(spi_handle, scs):
     print("Data read from SPI: ", tmp)
 
 def test_neo_1(np):
-    np[0] = (5, 5, 5)
-    np[1] = (5, 0, 5)
-    np[2] = (5, 5, 0)
+    np[0] = (0, 24, 0)
+    np[1] = (2, 2, 2)
+    np[2] = (20, 4, 0)
     np.write()
 
-def test_neo_2(np):
-    np[0] = (0, 5, 5)
-    np[1] = (5, 5, 5)
-    np[2] = (5, 0, 0)
-    np.write()
+# def test_neo_2(np):
+#     np[0] = (0, 5, 5)
+#     np[1] = (5, 5, 5)
+#     np[2] = (5, 0, 0)
+#     np.write()
 
-def test_neo_3(np):
-    np[0] = (10, 5, 15)
-    np[1] = (5, 15, 5)
-    np[2] = (5, 10, 10)
-    np.write()
+# def test_neo_3(np):
+#     np[0] = (10, 5, 15)
+#     np[1] = (5, 15, 5)
+#     np[2] = (5, 10, 10)
+#     np.write()
 
 def neo_in(np_curr):
     if np_curr == (5,5,5):
@@ -390,7 +391,7 @@ def spi_wren(spi, scs):
 def check_spud(nuid):
     tmp = execute_order_66(nuid, 0, "do-i-have-a-potato")
     # print(tmp['maybe'])
-    if tmp['maybe']:
+    if tmp is None and tmp['maybe']:
         return True
 
 
